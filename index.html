@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My House - Interactive Test (2 класс)</title>
+    <style>
+        /* Мультяшный стиль */
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&display=swap');
+
+        :root {
+            --primary: #FF6B6B;
+            --secondary: #4ECDC4;
+            --accent: #FFE66D;
+            --bg: #F7FFF7;
+            --text: #2F3542;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--bg);
+            background-image: radial-gradient(#e0f7fa 20%, transparent 20%), radial-gradient(#e0f7fa 20%, transparent 20%);
+            background-position: 0 0, 50px 50px;
+            background-size: 100px 100px;
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            font-size: 18px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 30px;
+            border: 4px solid var(--text);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary);
+            font-size: 2.2em;
+            text-shadow: 2px 2px 0 var(--accent);
+            margin-top: 0;
+        }
+
+        h2 {
+            color: var(--secondary);
+            font-size: 1.5em;
+            border-bottom: 3px dashed var(--secondary);
+            padding-bottom: 10px;
+        }
+
+        /* Блок ученика */
+        .student-info {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #FFF9E6;
+            border-radius: 20px;
+            border: 3px solid var(--accent);
+        }
+        .student-info div { flex: 1; }
+        .student-info label { 
+            font-weight: 800; 
+            display: block; 
+            margin-bottom: 5px; 
+            color: var(--text);
+        }
+        .student-info input {
+            padding: 12px;
+            border: 3px solid #ccc;
+            border-radius: 15px;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 16px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+        .student-info input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        /* Карточки заданий */
+        .exercise {
+            margin-bottom: 40px;
+        }
+
+        /* Задание 1: Картинки-иконки */
+        .pictures-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .pic-card {
+            text-align: center;
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 20px;
+            border: 3px solid var(--secondary);
+            width: 200px;
+            transition: all 0.3s;
+        }
+        .icon-box {
+            font-size: 5em;
+            line-height: 1.2;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 15px;
+            border: 2px solid #ddd;
+            margin-bottom: 15px;
+        }
+        .pic-card select {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 10px;
+            border: 2px solid #ccc;
+            width: 100%;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            background: white;
+        }
+
+        /* Задание 3: Текст */
+        .text-exercise {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 20px;
+            border: 3px solid #ddd;
+        }
+        .question-row {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 15px;
+            border-radius: 15px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            font-size: 1.1em;
+        }
+        .question-row.correct { 
+            background: #d4edda; 
+            border-color: #4CAF50;
+        }
+        .question-row.incorrect { 
+            background: #f8d7da; 
+            border-color: #F44336;
+        }
+        
+        .question-row select {
+            padding: 8px 12px;
+            font-size: 1.1em;
+            border-radius: 10px;
+            border: 2px solid var(--secondary);
+            font-family: inherit;
+            font-weight: bold;
+            color: var(--secondary);
+            background: white;
+            cursor: pointer;
+        }
+
+        /* Кнопки */
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 20px;
+            font-size: 20px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+            margin-top: 20px;
+            font-family: inherit;
+            border: 3px solid var(--text);
+            box-shadow: 0 6px 0 var(--text);
+        }
+        .btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 0 0 var(--text);
+        }
+        .btn-check {
+            background: var(--accent);
+            color: var(--text);
+        }
+        .btn-submit {
+            background: var(--primary);
+            color: white;
+            display: none;
+        }
+
+        /* Результаты */
+        #result-box {
+            display: none;
+            text-align: center;
+            font-size: 1.2em;
+            margin-top: 20px;
+            padding: 20px;
+            background: #e3f2fd;
+            border-radius: 20px;
+            border: 3px solid #2196f3;
+        }
+
+        /* Сообщения об ошибках Formspree */
+        [data-fs-error] {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: block;
+        }
+    </style>
+    <!-- Интеграция Formspree (Vanilla JS) -->
+    <script>
+        window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
+        formspree('initForm', { formElement: '#my-form', formId: 'myewlvnn' });
+    </script>
+    <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
+</head>
+<body>
+
+<div class="container">
+    <h1>🏠 My House 🏠</h1>
+    <div data-fs-success style="color: green; font-weight: bold; text-align: center; margin-bottom: 20px; font-size: 1.2em;"></div>
+    <div data-fs-error style="color: red; font-weight: bold; text-align: center; margin-bottom: 20px;"></div>
+
+    <form id="my-form" action="https://formspree.io/f/myewlvnn" method="POST">
+        
+        <!-- Ввод имени и класса -->
+        <div class="student-info">
+            <div>
+                <label for="name">👦 Name (Имя) *:</label>
+                <input type="text" id="name" name="Name" data-fs-field required placeholder="Например: Ваня">
+                <span data-fs-error="Name"></span>
+            </div>
+            <div>
+                <label for="class">🏫 Class (Класс) *:</label>
+                <input type="text" id="class" name="Class" data-fs-field required placeholder="Например: 2.2">
+                <span data-fs-error="Class"></span>
+            </div>
+        </div>
+
+        <!-- Скрытые поля для баллов -->
+        <input type="hidden" name="Score_Match" id="score-match" value="0">
+        <input type="hidden" name="Score_He_She" id="score-heshe" value="0">
+        <input type="hidden" name="Total_Score" id="score-total" value="0">
+
+        <!-- Задание 1: Look, read and match -->
+        <div class="exercise" id="ex1">
+            <h2>1. Look, read and match (Посмотри и подбери)</h2>
+            <div class="pictures-container">
+                <!-- Иконка 1: Кухня -->
+                <div class="pic-card">
+                    <div class="icon-box">🍳</div>
+                    <select name="Match_1" data-correct="c kitchen">
+                        <option value="">Выбери...</option>
+                        <option value="a garden">a garden</option>
+                        <option value="b bedroom">b bedroom</option>
+                        <option value="c kitchen">c kitchen</option>
+                    </select>
+                </div>
+                <!-- Иконка 2: Спальня -->
+                <div class="pic-card">
+                    <div class="icon-box">🛏️</div>
+                    <select name="Match_2" data-correct="b bedroom">
+                        <option value="">Выбери...</option>
+                        <option value="a garden">a garden</option>
+                        <option value="b bedroom">b bedroom</option>
+                        <option value="c kitchen">c kitchen</option>
+                    </select>
+                </div>
+                <!-- Иконка 3: Сад -->
+                <div class="pic-card">
+                    <div class="icon-box">🌳</div>
+                    <select name="Match_3" data-correct="a garden">
+                        <option value="">Выбери...</option>
+                        <option value="a garden">a garden</option>
+                        <option value="b bedroom">b bedroom</option>
+                        <option value="c kitchen">c kitchen</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Задание 3: Read and write. Use: He's or She's -->
+        <div class="exercise" id="ex3">
+            <h2>3. Read and write. Use: He's or She's</h2>
+            <div class="text-exercise">
+                
+                <div class="question-row" data-correct="She's">
+                    <span>1. A: Where's Mummy?<br>B: <select name="HeShe_1" data-correct="She's"><option value="">...</option><option value="He's">He's</option><option value="She's">She's</option></select> in the garden.</span>
+                </div>
+
+                <div class="question-row" data-correct="He's">
+                    <span>2. A: Where's Daddy?<br>B: <select name="HeShe_2" data-correct="He's"><option value="">...</option><option value="He's">He's</option><option value="She's">She's</option></select> in the house.</span>
+                </div>
+
+                <div class="question-row" data-correct="He's">
+                    <span>3. A: Where's grandpa?<br>B: <select name="HeShe_3" data-correct="He's"><option value="">...</option><option value="He's">He's</option><option value="She's">She's</option></select> in the bedroom.</span>
+                </div>
+
+                <div class="question-row" data-correct="She's">
+                    <span>4. A: Where's grandma?<br>B: <select name="HeShe_4" data-correct="She's"><option value="">...</option><option value="He's">He's</option><option value="She's">She's</option></select> in the kitchen.</span>
+                </div>
+
+                <div class="question-row" data-correct="He's">
+                    <span>5. A: Where's Larry?<br>B: <select name="HeShe_5" data-correct="He's"><option value="">...</option><option value="He's">He's</option><option value="She's">She's</option></select> in the garden.</span>
+                </div>
+
+                <div class="question-row" data-correct="She's">
+                    <span>6. A: Where's Lulu?<br>B: <select name="HeShe_6" data-correct="She's"><option value="">...</option><option value="He's">He's</option><option value="She's">She's</option></select> in the tree house.</span>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Блок результатов -->
+        <div id="result-box"></div>
+
+        <!-- Кнопки управления -->
+        <button type="button" class="btn btn-check" id="check-btn">Проверить ответы 🎉</button>
+        <button type="submit" class="btn btn-submit" id="submit-btn" data-fs-submit-btn>Отправить учителю 🚀</button>
+    </form>
+</div>
+
+<script>
+    // Перемешивание вариантов в первом задании
+    document.addEventListener('DOMContentLoaded', () => {
+        const selects = document.querySelectorAll('#ex1 select');
+        selects.forEach(select => {
+            const options = Array.from(select.options).slice(1);
+            options.sort(() => Math.random() - 0.5);
+            select.innerHTML = '<option value="">Выбери...</option>';
+            options.forEach(opt => select.appendChild(opt));
+        });
+    });
+
+    // Логика проверки
+    document.getElementById('check-btn').addEventListener('click', function() {
+        let scores = { match: 0, heshe: 0 };
+        
+        // Проверка Задания 1
+        document.querySelectorAll('#ex1 select').forEach(select => {
+            const parent = select.closest('.pic-card');
+            if (select.value === select.dataset.correct) {
+                scores.match++;
+                parent.style.borderColor = '#4CAF50';
+                parent.style.background = '#E8F5E9';
+            } else {
+                parent.style.borderColor = '#F44336';
+                parent.style.background = '#FFEBEE';
+            }
+        });
+
+        // Проверка Задания 3
+        document.querySelectorAll('#ex3 .question-row').forEach(row => {
+            const select = row.querySelector('select');
+            if (select.value === select.dataset.correct) {
+                scores.heshe++;
+                row.classList.add('correct');
+                row.classList.remove('incorrect');
+            } else {
+                row.classList.add('incorrect');
+                row.classList.remove('correct');
+            }
+        });
+
+        // Итоги
+        const total = scores.match + scores.heshe;
+        
+        document.getElementById('score-match').value = scores.match;
+        document.getElementById('score-heshe').value = scores.heshe;
+        document.getElementById('score-total').value = total;
+
+        const resultBox = document.getElementById('result-box');
+        resultBox.style.display = 'block';
+        resultBox.innerHTML = `
+            <strong>Твои результаты:</strong><br>
+            Задание 1 (Match): ${scores.match} / 3<br>
+            Задание 3 (He's/She's): ${scores.heshe} / 6<br>
+            <hr style="border: 1px dashed #2196f3; margin: 10px 0;">
+            <span style="font-size: 1.3em; color: #d32f2f; font-weight: 900;">Всего: ${total} / 9 баллов</span>
+        `;
+
+        document.getElementById('submit-btn').style.display = 'block';
+        resultBox.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Проверка перед отправкой
+    document.getElementById('my-form').addEventListener('submit', function(e) {
+        const name = document.getElementById('name').value.trim();
+        const className = document.getElementById('class').value.trim();
+        const submitBtn = document.getElementById('submit-btn');
+
+        if (submitBtn.style.display === 'none' || submitBtn.style.display === '') {
+            e.preventDefault();
+            alert('Сначала нажми "Проверить ответы" 🎉!');
+            return;
+        }
+
+        if (!name || !className) {
+            e.preventDefault();
+            alert('Пожалуйста, заполни поля Name и Class! ✍️');
+            if (!name) document.getElementById('name').style.borderColor = 'var(--primary)';
+            if (!className) document.getElementById('class').style.borderColor = 'var(--primary)';
+        }
+    });
+</script>
+</body>
+</html>
